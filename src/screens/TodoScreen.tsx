@@ -22,36 +22,6 @@ const TodoScreen: React.FC = ({navigation}) => {
   const [todoText, setTodoText] = useState<string>('');
   const [loading, setLoading] = useState<string>(false);
   const [todos, setTodos] = useState<TodoItem[]>([]);
-  useEffect(() => {
-    if (__DEV__) {
-      setTodos([
-        {
-          id: '1',
-          text: 'Banana',
-          quantity: '1',
-          unit: '',
-        },
-        {
-          id: '2',
-          text: 'Arroz',
-          quantity: '1',
-          unit: '',
-        },
-        {
-          id: '3',
-          text: 'Feijão',
-          quantity: '1',
-          unit: '',
-        },
-        {
-          id: '4',
-          text: 'papel higienico',
-          quantity: '1',
-          unit: '',
-        },
-      ]);
-    }
-  }, [navigation]);
 
   const addTodo = () => {
     if (todoText.trim() !== '') {
@@ -164,6 +134,8 @@ const TodoScreen: React.FC = ({navigation}) => {
       <FlatList
         data={todos}
         keyExtractor={item => item.id}
+        style={styles.todoList}
+        showsVerticalScrollIndicator={false}
         renderItem={({item}) => (
           <View style={styles.todoItem}>
             <View style={styles.todoDetails}>
@@ -190,7 +162,7 @@ const TodoScreen: React.FC = ({navigation}) => {
             <TouchableOpacity
               onPress={() => removeTodo(item.id)}
               style={styles.removeButton}>
-              <Text style={styles.removeButtonText}>Remover</Text>
+              <Text style={styles.removeButtonText}>del</Text>
             </TouchableOpacity>
           </View>
         )}
@@ -213,6 +185,9 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 16,
     backgroundColor: '#f5f5f5',
+  },
+  todoList: {
+    height: '70%',
   },
   loading: {
     flex: 1,
@@ -304,7 +279,7 @@ const styles = StyleSheet.create({
   todoText: {
     fontSize: 16,
     color: '#333',
-    width: '40%',
+    width: '60%',
   },
   categoryButton: {
     backgroundColor: '#61dafb',

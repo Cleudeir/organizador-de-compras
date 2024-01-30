@@ -1,5 +1,11 @@
 import React, {useState} from 'react';
-import {View, Text, FlatList, StyleSheet, TouchableOpacity} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  ScrollView,
+} from 'react-native';
 
 interface CategoryScreenProps {
   route: {
@@ -11,22 +17,27 @@ interface CategoryScreenProps {
 
 const CategoryScreen: React.FC<CategoryScreenProps> = ({route}) => {
   const categories = route.params;
-
+  let count = 0;
   const [categoryData, setCategoryData] = useState<{
     [key: string]: {id: string; text: string; completed: boolean}[];
   }>(
     Object.fromEntries(
-      Object.keys(categories).map(category => [
+      Object.keys(categories).map((category, index) => [
         category,
-        (categories[category] || []).map((text, id) => ({
-          id: id.toString(),
-          text,
-          completed: false,
-        })),
+        (categories[category] || [])
+          .filter(text => text !== undefined)
+          .map((text, id) => {
+            count++;
+            return {
+              order: count < 10 ? `0${count}` : count,
+              id: id.toString(),
+              text,
+              completed: false,
+            };
+          }),
       ]),
     ),
   );
-
   const categoryKeys = Object.keys(categories);
 
   const handleToggleCompleted = (category: string, itemId: string) => {
@@ -43,16 +54,21 @@ const CategoryScreen: React.FC<CategoryScreenProps> = ({route}) => {
 
   return (
     <View style={styles.container}>
-      {categoryKeys.map(category => (
-        <View key={category} style={styles.categoryContainer}>
-          <Text style={styles.categoryTitle}>{category}</Text>
-          <FlatList
-            data={categoryData[category]}
-            keyExtractor={item => item.id}
-            renderItem={({item}) => (
+      <ScrollView showsVerticalScrollIndicator={false}>
+        {categoryKeys.map(category => (
+          <View key={category} style={styles.categoryContainer}>
+            <Text style={styles.categoryTitle}>{category}</Text>
+            {categoryData[category].map(item => (
               <TouchableOpacity
                 onPress={() => handleToggleCompleted(category, item.id)}>
                 <View style={styles.todoItem}>
+                  <Text
+                    style={[
+                      styles.todoText,
+                      item.completed && styles.completedTodo,
+                    ]}>
+                    {item.order} -{' '}
+                  </Text>
                   <View style={styles.checkboxContainer}>
                     <View
                       style={[
@@ -70,10 +86,10 @@ const CategoryScreen: React.FC<CategoryScreenProps> = ({route}) => {
                   </Text>
                 </View>
               </TouchableOpacity>
-            )}
-          />
-        </View>
-      ))}
+            ))}
+          </View>
+        ))}
+      </ScrollView>
     </View>
   );
 };

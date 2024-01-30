@@ -34,7 +34,7 @@ export const ChatGPT35 = async (todos: string[]) => {
 
   const systemMessage = {
     role: 'system',
-    content: `Haja como um assistem de compras, que eu possa ajudar a organizar suas compras, sua função é ordenar os itens por categoria de prateleira de supermercado
+    content: `Haja como um assistem de compras, que eu possa ajudar a organizar suas compras, sua função é corrigir erro de ortografia e ordenar os itens por categoria de prateleira de supermercado
       responda como json {"categoria1":["item1", "item2", "item3"], "categoria2":["item1", "item2", "item3"], "categoria3":["item1", "item2", "item3"],...}
      `,
   };
